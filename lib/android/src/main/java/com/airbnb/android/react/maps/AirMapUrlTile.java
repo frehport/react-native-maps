@@ -2,10 +2,11 @@ package com.airbnb.android.react.maps;
 
 import android.content.Context;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.TileOverlay;
-import com.google.android.gms.maps.model.TileOverlayOptions;
-import com.google.android.gms.maps.model.UrlTileProvider;
+import com.amap.api.maps2d.AMap;
+import com.amap.api.maps2d.model.TileOverlay;
+import com.amap.api.maps2d.model.TileOverlayOptions;
+import com.amap.api.maps2d.model.UrlTileProvider;
+
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -90,12 +91,12 @@ public class AirMapUrlTile extends AirMapFeature {
   }
 
   @Override
-  public void addToMap(GoogleMap map) {
+  public void addToMap(AMap map) {
     this.tileOverlay = map.addTileOverlay(getTileOverlayOptions());
   }
 
   @Override
-  public void removeFromMap(GoogleMap map) {
+  public void removeFromMap(AMap map) {
     tileOverlay.remove();
   }
 }

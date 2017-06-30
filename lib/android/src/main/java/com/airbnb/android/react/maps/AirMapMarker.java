@@ -25,12 +25,13 @@ import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.facebook.react.bridge.ReadableMap;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
+
+import com.amap.api.maps2d.AMap;
+import com.amap.api.maps2d.model.Marker;
+import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.maps2d.model.MarkerOptions;
+import com.amap.api.maps2d.model.BitmapDescriptor;
+import com.amap.api.maps2d.model.BitmapDescriptorFactory;
 
 import javax.annotation.Nullable;
 
@@ -154,7 +155,7 @@ public class AirMapMarker extends AirMapFeature {
   public void setRotation(float rotation) {
     this.rotation = rotation;
     if (marker != null) {
-      marker.setRotation(rotation);
+//      marker.setRotation(rotation);
     }
     update();
   }
@@ -162,7 +163,7 @@ public class AirMapMarker extends AirMapFeature {
   public void setFlat(boolean flat) {
     this.flat = flat;
     if (marker != null) {
-      marker.setFlat(flat);
+//      marker.setFlat(flat);
     }
     update();
   }
@@ -186,7 +187,7 @@ public class AirMapMarker extends AirMapFeature {
   public void setOpacity(float opacity) {
     this.opacity = opacity;
     if (marker != null) {
-      marker.setAlpha(opacity);
+//      marker.setAlpha(opacity);
     }
     update();
   }
@@ -211,7 +212,7 @@ public class AirMapMarker extends AirMapFeature {
     calloutAnchorX = (float) x;
     calloutAnchorY = (float) y;
     if (marker != null) {
-      marker.setInfoWindowAnchor(calloutAnchorX, calloutAnchorY);
+//      marker.setInfoWindowAnchor(calloutAnchorX, calloutAnchorY);
     }
     update();
   }
@@ -263,12 +264,12 @@ public class AirMapMarker extends AirMapFeature {
   }
 
   @Override
-  public void addToMap(GoogleMap map) {
+  public void addToMap(AMap map) {
     marker = map.addMarker(getMarkerOptions());
   }
 
   @Override
-  public void removeFromMap(GoogleMap map) {
+  public void removeFromMap(AMap map) {
     marker.remove();
     marker = null;
   }
@@ -300,14 +301,14 @@ public class AirMapMarker extends AirMapFeature {
   private MarkerOptions createMarkerOptions() {
     MarkerOptions options = new MarkerOptions().position(position);
     if (anchorIsSet) options.anchor(anchorX, anchorY);
-    if (calloutAnchorIsSet) options.infoWindowAnchor(calloutAnchorX, calloutAnchorY);
+//    if (calloutAnchorIsSet) options.infoWindowAnchor(calloutAnchorX, calloutAnchorY);
     options.title(title);
     options.snippet(snippet);
-    options.rotation(rotation);
-    options.flat(flat);
+//    options.rotation(rotation);
+//    options.flat(flat);
     options.draggable(draggable);
     options.zIndex(zIndex);
-    options.alpha(opacity);
+//    options.alpha(opacity);
     options.icon(getIcon());
     return options;
   }
@@ -326,9 +327,9 @@ public class AirMapMarker extends AirMapFeature {
     }
 
     if (calloutAnchorIsSet) {
-      marker.setInfoWindowAnchor(calloutAnchorX, calloutAnchorY);
+//      marker.setInfoWindowAnchor(calloutAnchorX, calloutAnchorY);
     } else {
-      marker.setInfoWindowAnchor(0.5f, 0);
+//      marker.setInfoWindowAnchor(0.5f, 0);
     }
   }
 

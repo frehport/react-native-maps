@@ -2,6 +2,7 @@ package com.airbnb.android.react.maps;
 
 import android.view.View;
 
+import com.amap.api.maps2d.AMapException;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
@@ -14,11 +15,11 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMapOptions;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.MapStyleOptions;
+
+import com.amap.api.maps2d.AMap;
+import com.amap.api.maps2d.model.LatLngBounds;
+import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.maps2d.AMapOptions;
 
 import java.util.Map;
 
@@ -34,20 +35,17 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
   private static final int FIT_TO_COORDINATES = 5;
 
   private final Map<String, Integer> MAP_TYPES = MapBuilder.of(
-      "standard", GoogleMap.MAP_TYPE_NORMAL,
-      "satellite", GoogleMap.MAP_TYPE_SATELLITE,
-      "hybrid", GoogleMap.MAP_TYPE_HYBRID,
-      "terrain", GoogleMap.MAP_TYPE_TERRAIN,
-      "none", GoogleMap.MAP_TYPE_NONE
+      "standard", AMap.MAP_TYPE_NORMAL,
+      "satellite", AMap.MAP_TYPE_SATELLITE
   );
 
   private final ReactApplicationContext appContext;
 
-  protected GoogleMapOptions googleMapOptions;
+  protected AMapOptions googleMapOptions;
 
   public AirMapManager(ReactApplicationContext context) {
     this.appContext = context;
-    this.googleMapOptions = new GoogleMapOptions();
+    this.googleMapOptions = new AMapOptions();
   }
 
   @Override
@@ -71,7 +69,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
   }
 
   @ReactProp(name = "region")
-  public void setRegion(AirMapView view, ReadableMap region) {
+  public void setRegion(AirMapView view, ReadableMap region) throws Exception {
     view.setRegion(region);
   }
 
@@ -83,7 +81,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
 
   @ReactProp(name = "customMapStyleString")
   public void setMapStyle(AirMapView view, @Nullable String customMapStyleString) {
-    view.map.setMapStyle(new MapStyleOptions(customMapStyleString));
+//    view.map.setMapStyle(new MapStyleOptions(customMapStyleString));
   }
 
   @ReactProp(name = "showsUserLocation", defaultBoolean = false)
@@ -115,17 +113,17 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
 
   @ReactProp(name = "showsBuildings", defaultBoolean = false)
   public void setShowBuildings(AirMapView view, boolean showBuildings) {
-    view.map.setBuildingsEnabled(showBuildings);
+//    view.map.setBuildingsEnabled(showBuildings);
   }
 
   @ReactProp(name = "showsIndoors", defaultBoolean = false)
   public void setShowIndoors(AirMapView view, boolean showIndoors) {
-    view.map.setIndoorEnabled(showIndoors);
+//    view.map.setIndoorEnabled(showIndoors);
   }
 
   @ReactProp(name = "showsIndoorLevelPicker", defaultBoolean = false)
   public void setShowsIndoorLevelPicker(AirMapView view, boolean showsIndoorLevelPicker) {
-    view.map.getUiSettings().setIndoorLevelPickerEnabled(showsIndoorLevelPicker);
+//    view.map.getUiSettings().setIndoorLevelPickerEnabled(showsIndoorLevelPicker);
   }
 
   @ReactProp(name = "showsCompass", defaultBoolean = false)
@@ -145,7 +143,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
 
   @ReactProp(name = "rotateEnabled", defaultBoolean = false)
   public void setRotateEnabled(AirMapView view, boolean rotateEnabled) {
-    view.map.getUiSettings().setRotateGesturesEnabled(rotateEnabled);
+//    view.map.getUiSettings().setRotateGesturesEnabled(rotateEnabled);
   }
 
   @ReactProp(name = "cacheEnabled", defaultBoolean = false)
@@ -175,7 +173,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
 
   @ReactProp(name = "pitchEnabled", defaultBoolean = false)
   public void setPitchEnabled(AirMapView view, boolean pitchEnabled) {
-    view.map.getUiSettings().setTiltGesturesEnabled(pitchEnabled);
+//    view.map.getUiSettings().setTiltGesturesEnabled(pitchEnabled);
   }
 
   @Override
@@ -195,11 +193,16 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         lat = region.getDouble("latitude");
         lngDelta = region.getDouble("longitudeDelta");
         latDelta = region.getDouble("latitudeDelta");
-        LatLngBounds bounds = new LatLngBounds(
-            new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
-            new LatLng(lat + latDelta / 2, lng + lngDelta / 2)  // northeast
-        );
-        view.animateToRegion(bounds, duration);
+        try {
+          LatLngBounds bounds = new LatLngBounds(
+                  new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
+                  new LatLng(lat + latDelta / 2, lng + lngDelta / 2)  // northeast
+          );
+          view.animateToRegion(bounds, duration);
+        } catch (AMapException e) {
+          e.printStackTrace();
+        }
+
         break;
 
       case ANIMATE_TO_COORDINATE:
